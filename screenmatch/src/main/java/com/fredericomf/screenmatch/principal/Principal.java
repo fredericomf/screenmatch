@@ -6,7 +6,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -77,6 +79,21 @@ public class Principal {
                                 " Episódio: " + e.getTitulo() +
                                 " Data lançamento: " + formatador.format(e.getDataLancamento())));
 
+        // Estatísticas
+        Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0.0)
+                .collect(Collectors.groupingBy(Episodio::getTemporada,
+                        Collectors.averagingDouble(Episodio::getAvaliacao)));
+        System.out.println(avaliacoesPorTemporada);
+
+        DoubleSummaryStatistics estatisticas = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0.0)
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+
+        System.out.println("Média: " + estatisticas.getAverage());
+        System.out.println("Pior episódio: " + estatisticas.getMin());
+        System.out.println("Melhor episódio: " + estatisticas.getMax());
+        System.out.println("Quantidade de episódios: " + estatisticas.getCount());
     }
 
     // Preferi implementar esses métodos auxiliares, para uma implementação mais
