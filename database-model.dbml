@@ -1,0 +1,10 @@
+Table series {
+  id long [primary key]
+  titulo text
+  totalTemporadas int
+  avaliacao double
+  genero text
+  atores text
+  poster text
+  sinopse text
+}

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.fredericomf.screenmatch.model.DadosSerie;
 import com.fredericomf.screenmatch.model.DadosTemporada;
 import com.fredericomf.screenmatch.model.Serie;
+import com.fredericomf.screenmatch.repository.SerieRepository;
 import com.fredericomf.screenmatch.service.ConsumoApi;
 import com.fredericomf.screenmatch.service.ConverteDados;
 
@@ -18,9 +19,15 @@ public class Principal {
     private ConsumoApi consumo = new ConsumoApi();
     private ConverteDados conversor = new ConverteDados();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=54abc975";
+    private final String API_KEY = "&apikey=" + System.getenv("OMDB_API_KEY");
 
     private List<DadosSerie> dadosSeries = new ArrayList<>();
+
+    private SerieRepository repository;
+
+    public Principal(SerieRepository repository) {
+        this.repository = repository;
+    }
 
     public void exibeMenu() {
 
@@ -60,11 +67,7 @@ public class Principal {
 
     private void listarSeriesBuscadas() {
 
-        List<Serie> series = new ArrayList<>();
-
-        series = dadosSeries.stream()
-                .map(s -> new Serie(s))
-                .collect(Collectors.toList());
+        List<Serie> series = repository.findAll();
 
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
@@ -73,7 +76,7 @@ public class Principal {
 
     private void buscarSerieWeb() {
         var serie = getDadosSerie();
-        dadosSeries.add(serie);
+        repository.save(new Serie(serie));
     }
 
     private DadosSerie getDadosSerie() {
