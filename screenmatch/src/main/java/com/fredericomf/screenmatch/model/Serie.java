@@ -6,14 +6,16 @@ import java.util.OptionalDouble;
 
 import com.fredericomf.screenmatch.service.ConsultaMyMemory;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "series")
@@ -33,8 +35,8 @@ public class Serie {
     private String poster;
     private String sinopse;
 
-    @Transient
-    private List<Episodio> episodios = new ArrayList<>(); // <>();
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Episodio> episodios = new ArrayList<>();
 
     public Serie() {
     }
@@ -48,6 +50,15 @@ public class Serie {
         this.poster = dadosSerie.poster();
         // this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse());
         this.sinopse = ConsultaMyMemory.obterTraducao(dadosSerie.sinopse());
+    }
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
+        this.episodios = episodios;
     }
 
     public Long getId() {
@@ -122,7 +133,8 @@ public class Serie {
                 ", avaliacao=" + avaliacao +
                 ", atores='" + atores + '\'' +
                 ", poster='" + poster + '\'' +
-                ", sinopse='" + sinopse + '\'';
+                ", sinopse='" + sinopse + '\'' +
+                ", episódios='" + episodios + '\'';
     }
 
 }
