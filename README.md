@@ -20,3 +20,11 @@ Caso queira rodar com volume, eu preparei um arquivo do Docker Compose para roda
 ```bash
 sudo docker compose up
 ```
+
+# Utilidades
+
+## Links
+
+### Documentação sobre Derived Queries
+
+https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
