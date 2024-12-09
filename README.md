@@ -28,3 +28,7 @@ sudo docker compose up
 ### Documentação sobre Derived Queries
 
 https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
+
+### Artigo sobre SQL Join
+
+https://www.alura.com.br/artigos/join-e-seus-tipos
